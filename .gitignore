@@ -40,3 +40,6 @@ Thumbs.db
 
 # Monorepo Logs folder
 logs
+
+# Environment
+.config.env

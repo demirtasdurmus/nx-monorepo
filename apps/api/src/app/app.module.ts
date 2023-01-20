@@ -1,11 +1,14 @@
-import { Module } from '@nestjs/common';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Logger, Module, MiddlewareConsumer } from '@nestjs/common';
+import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
+import { MorganWinstonMiddleware } from '@nx-monorepo/nest';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [ConfigModule.forRoot({ envFilePath: `./../../.config.env` })],
+    controllers: [],
+    providers: [Logger],
 })
-export class AppModule {}
+export class AppModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(MorganWinstonMiddleware).forRoutes('*');
+    }
+}
