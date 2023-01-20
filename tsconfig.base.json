@@ -15,7 +15,10 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@nx-monorepo/nest": ["libs/nest/src/index.ts"]
+            "@nx-monorepo/backend/core": ["libs/backend/core/src/index.ts"],
+            "@nx-monorepo/backend/data": ["libs/backend/data/src/index.ts"],
+            "@nx-monorepo/nest": ["libs/nest/src/index.ts"],
+            "@nx-monorepo/shared/api-interface": ["libs/shared/api-interface/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]

@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { rainbow } from '@colors/colors/safe';
@@ -9,6 +9,21 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule, {
         logger: LoggerFactory.createWinstonLogger('api'),
     });
+
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true, // check ValidationPipeOptions and its parent class for more options
+            // transform?: boolean;
+            // disableErrorMessages?: boolean;
+            // transformOptions?: ClassTransformOptions;
+            // errorHttpStatusCode?: ErrorHttpStatusCode;
+            // exceptionFactory?: (errors: ValidationError[]) => any;
+            // validateCustomDecorators?: boolean;
+            // expectedType?: Type<any>;
+            // validatorPackage?: ValidatorPackage;
+            // transformerPackage?: TransformerPackage;
+        }),
+    );
 
     const configService: ConfigService = app.get(ConfigService);
 
