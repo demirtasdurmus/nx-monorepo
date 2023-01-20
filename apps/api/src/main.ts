@@ -12,12 +12,10 @@ async function bootstrap() {
 
     const configService: ConfigService = app.get(ConfigService);
 
-    const globalPrefix = 'api';
-    app.setGlobalPrefix(globalPrefix);
-
-    console.log('**', configService.get('API_PORT'));
-
+    const globalPrefix = configService.get('GLOBAL_API_PREFIX', 'api/v1');
     const port = configService.get('API_PORT', 8000);
+
+    app.setGlobalPrefix(globalPrefix);
 
     await app.listen(port, () => {
         Logger.log(`🚀 ${rainbow(` Application is running on: http://localhost:${port}/${globalPrefix}`)}`);
