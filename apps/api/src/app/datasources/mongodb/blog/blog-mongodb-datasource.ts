@@ -15,7 +15,7 @@ export class BlogMongoDatasource implements IBlogDatabaseDatasource {
     }
 
     getById(id: string): Promise<Blog> {
-        return this.blogModel.findOne({ id }).exec();
+        return this.blogModel.findOne({ _id: id }).exec();
     }
 
     create(blog: Blog): Promise<Blog> {
