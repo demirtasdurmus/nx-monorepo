@@ -6,20 +6,20 @@ import { Blog } from '@nx-monorepo/backend/core';
 
 @Controller('blogs')
 export class BlogController {
-    constructor(private readonly exampleService: BlogService) {}
+    constructor(private readonly blogService: BlogService) {}
 
     @Get()
     async getAll(): Promise<Blog[]> {
-        return this.exampleService.getAll();
+        return this.blogService.getAll();
     }
 
     @Get(':id')
     async getByName(@Param('id') id: string): Promise<Blog> {
-        return this.exampleService.getById(id);
+        return this.blogService.getById(id);
     }
 
     @Post()
     async create(@Body() createBlogDto: CreateBlogDto): Promise<Blog> {
-        return this.exampleService.create(createBlogDto);
+        return this.blogService.create(createBlogDto);
     }
 }
