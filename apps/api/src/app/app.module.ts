@@ -4,6 +4,8 @@ import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { MorganWinstonMiddleware } from '@nx-monorepo/nest';
 import { BlogModule } from './modules/blog/blog.module';
 import { MongoDBUtil } from './utils/mongo-db-util';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
     imports: [
@@ -22,6 +24,8 @@ import { MongoDBUtil } from './utils/mongo-db-util';
             inject: [ConfigService],
         }),
         BlogModule,
+        AuthModule,
+        UserModule,
     ],
     providers: [Logger],
 })

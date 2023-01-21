@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 // import * as mongoose from 'mongoose';
 // import { User } from '../../user/schemas/user.schema';
 
-export type BlogDocument = HydratedDocument<Blog>;
+export type UserDocument = HydratedDocument<User>;
 
 @Schema({
     versionKey: false,
@@ -20,12 +20,12 @@ export type BlogDocument = HydratedDocument<Blog>;
         },
     },
 })
-export class Blog {
-    @Prop({ required: true })
-    title: string;
+export class User {
+    @Prop({ required: true, unique: true })
+    email: string;
 
     @Prop({ required: true })
-    content: string;
+    password: string;
 
     // referencing in action with decorators
     // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
@@ -46,4 +46,4 @@ export class Blog {
     // details: Record<string, any>;
 }
 
-export const BlogSchema = SchemaFactory.createForClass(Blog);
+export const UserSchema = SchemaFactory.createForClass(User);
