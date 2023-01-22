@@ -8,10 +8,7 @@ export abstract class IGetUserByEmailUsecase {
 export class GetUserByEmailUsecase implements IGetUserByEmailUsecase {
     constructor(private readonly repository: IUserRepository) {}
 
-    async execute(email: string): Promise<User> {
-        const user = await this.repository.getByEmail(email);
-        // TODO: create a dedicated exeption lib to handle these cases
-        if (!user) throw new Error('User not found.');
-        return user;
+    async execute(email: string): Promise<User | null> {
+        return this.repository.getByEmail(email);
     }
 }

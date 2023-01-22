@@ -1,26 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { User } from '@nx-monorepo/backend/core';
+import { BcryptService } from '@nx-monorepo/nest';
 
 @Injectable()
 export class AuthService {
-    constructor(private userService: UserService, private jwtService: JwtService) {}
+    private logger = new Logger(AuthService.name);
+    constructor(
+        private userService: UserService,
+        private jwtService: JwtService,
+        private readonly bcryptService: BcryptService,
+    ) {}
+
+    async createAccessToken(user: User): Promise<string> {
+        const token = await this.jwtService.signAsync({
+            data: { email: user.email },
+        });
+        this.logger.log(`The user logged in with ${user.email}`);
+        return token;
+    }
 
     async validateUser(email: string, password: string): Promise<Omit<User, 'password'> | null> {
         const user = await this.userService.getByEmail(email);
-        if (user && user.password === password) {
-            const { password, ...result } = user;
-            console.log('pass', password);
-            return result;
+        if (!user) {
+            this.logger.error(`The user could not be validated with ${email}`);
+            throw new BadRequestException('Incorrect email or password');
         }
-        return null;
+        const isPasswordCorrect = await this.checkPassword(password, user.password);
+        if (!isPasswordCorrect) {
+            this.logger.error(`The user could not be validated with ${email}`);
+            throw new BadRequestException('Incorrect email or password');
+        }
+        this.logger.log(`The user validated with ${email}`);
+        return { email: user.email };
     }
 
-    async login(user: User) {
-        const payload = { email: user.email };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
+    private async checkPassword(password: string, hashedPassword: string): Promise<boolean> {
+        return await this.bcryptService.compare(password, hashedPassword);
     }
 }

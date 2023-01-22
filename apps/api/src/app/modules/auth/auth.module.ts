@@ -3,21 +3,21 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
-import { LocalStrategy } from './local-strategy';
-import { JwtStrategy } from './jwt-strategy';
+import { LocalStrategy } from './strategies/local-strategy';
+import { JwtStrategy } from './strategies/jwt-strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthUsecaseProvidersModule } from '../../di/auth-usecase-providers.module';
 import { UserService } from '../user/user.service';
+import { BcryptModule } from '@nx-monorepo/nest';
 
 @Module({
     imports: [
-        AuthUsecaseProvidersModule.forRoot(),
         PassportModule,
         UserModule,
         JwtModule.register({
             secret: 'secret',
-            signOptions: { expiresIn: '60s' },
+            signOptions: { expiresIn: '60s', issuer: 'nx-monorepo' },
         }),
+        BcryptModule,
     ],
     providers: [LocalStrategy, JwtStrategy, AuthService, UserService],
     controllers: [AuthController],
