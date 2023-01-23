@@ -1,15 +1,17 @@
-import {
-    Prop,
-    Schema,
-    SchemaFactory,
-    // raw
-} from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { UUID } from '../../../../utils/uuid';
 import { HydratedDocument } from 'mongoose';
 // import * as mongoose from 'mongoose';
-// import { User } from '../../user/schemas/user.schema';
 
 export type UserDocument = HydratedDocument<User>;
+export type UserStatus = 'active' | 'passive' | 'suspended' | 'banned';
+export enum UserRoles {
+    USER = 'USER',
+    DEVELOPER = 'DEVELOPER',
+    AUTHOR = 'AUTHOR',
+    ADMIN = 'ADMIN',
+    SUPERADMIN = 'SUPER_ADMIN',
+}
 
 @Schema({
     timestamps: true,
@@ -33,29 +35,41 @@ export class User {
     @Prop({ default: UUID.generateId() })
     _id: string;
 
+    @Prop()
+    firstName: string;
+
+    @Prop()
+    lastName: string;
+
+    @Prop()
+    profileImage: string;
+
     @Prop({ required: true, unique: true })
     email: string;
 
     @Prop({ required: true })
     password: string;
 
-    // referencing in action with decorators
-    // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    // owner: User;
+    @Prop({ default: false })
+    isVerified: boolean;
 
-    // In case there are multiple owners, your property configuration should look as follows:
-    // @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    // owner: User[];
+    @Prop({ default: 'active', enum: ['active', 'passive', 'suspended', 'banned'] })
+    status: UserStatus;
 
-    // the raw schema definition can also be passed to the decorator
-    // @Prop(
-    //     raw({
-    //         firstName: { type: String },
-    //         lastName: { type: String },
-    //     }),
-    // )
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // details: Record<string, any>;
+    @Prop({ default: [UserRoles.USER] })
+    roles: UserRoles[];
+
+    @Prop()
+    privacyPolicyAccepted: boolean;
+
+    @Prop()
+    passwordChangedAt: Date;
+
+    @Prop()
+    passwordResetToken: string;
+
+    @Prop()
+    passwordResetExpires: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
