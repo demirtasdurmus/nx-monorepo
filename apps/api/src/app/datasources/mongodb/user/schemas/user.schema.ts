@@ -1,4 +1,10 @@
-import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
+import {
+    Prop,
+    Schema,
+    SchemaFactory,
+    // raw
+} from '@nestjs/mongoose';
+import { UUID } from '../../../../utils/uuid';
 import { HydratedDocument } from 'mongoose';
 // import * as mongoose from 'mongoose';
 // import { User } from '../../user/schemas/user.schema';
@@ -6,21 +12,27 @@ import { HydratedDocument } from 'mongoose';
 export type UserDocument = HydratedDocument<User>;
 
 @Schema({
+    timestamps: true,
     versionKey: false,
     toJSON: {
         virtuals: true,
         transform: (_doc, ret) => {
+            ret.id = ret._id;
             delete ret._id;
         },
     },
     toObject: {
         virtuals: true,
         transform: (_doc, ret) => {
+            ret.id = ret._id;
             delete ret._id;
         },
     },
 })
 export class User {
+    @Prop({ default: UUID.generateId() })
+    _id: string;
+
     @Prop({ required: true, unique: true })
     email: string;
 
