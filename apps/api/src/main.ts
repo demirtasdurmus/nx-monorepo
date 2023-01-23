@@ -4,11 +4,15 @@ import { ConfigService } from '@nestjs/config';
 import { rainbow } from '@colors/colors/safe';
 import { LoggerFactory } from '@nx-monorepo/nest';
 import { AppModule } from './app/app.module';
+import helmet from 'helmet';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, {
         logger: LoggerFactory.createWinstonLogger('api'),
     });
+
+    app.use(helmet());
 
     app.useGlobalPipes(
         new ValidationPipe({
@@ -24,6 +28,13 @@ async function bootstrap() {
             // transformerPackage?: TransformerPackage;
         }),
     );
+
+    app.enableCors({
+        credentials: true,
+        origin: '*',
+    });
+
+    app.use(cookieParser());
 
     const configService: ConfigService = app.get(ConfigService);
 

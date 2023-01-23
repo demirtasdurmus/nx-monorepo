@@ -15,7 +15,7 @@ import { BcryptModule } from '@nx-monorepo/nest';
         UserModule,
         JwtModule.register({
             secret: 'secret',
-            signOptions: { expiresIn: '60s', issuer: 'nx-monorepo' },
+            signOptions: { expiresIn: '10d', issuer: 'nx-monorepo' },
         }),
         BcryptModule,
     ],
