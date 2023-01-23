@@ -1,7 +1,15 @@
-import { IsNotEmpty, IsString, IsEmail, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, MaxLength, MinLength, IsOptional } from 'class-validator';
 import { PasswordMatcher } from './password-matcher.decorator';
 
 export class CreateUserDto {
+    @IsString()
+    @IsOptional()
+    firstName: string;
+
+    @IsString()
+    @IsOptional()
+    lastName: string;
+
     @IsEmail()
     @MaxLength(250)
     @IsString()

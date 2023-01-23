@@ -19,7 +19,7 @@ export class UserMongoDatasource implements IUserDatabaseDatasource {
     }
 
     getByEmail(email: string): Promise<User> {
-        return this.UserModel.findOne({ email }).exec();
+        return this.UserModel.findOne({ email }).select('+password').exec();
     }
 
     create(User: User): Promise<User> {

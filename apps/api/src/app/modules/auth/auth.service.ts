@@ -15,13 +15,13 @@ export class AuthService {
 
     async createAccessToken(user: User): Promise<string> {
         const token = await this.jwtService.signAsync({
-            data: { email: user.email },
+            data: { id: user.id },
         });
         this.logger.log(`The user logged in with ${user.email}`);
         return token;
     }
 
-    async validateUser(email: string, password: string): Promise<Omit<User, 'password'> | null> {
+    async validateUser(email: string, password: string): Promise<Pick<User, 'id'>> {
         const user = await this.userService.getByEmail(email);
         if (!user) {
             this.logger.error(`The user could not be validated with ${email}`);
@@ -33,7 +33,7 @@ export class AuthService {
             throw new BadRequestException('Incorrect email or password');
         }
         this.logger.log(`The user validated with ${email}`);
-        return { email: user.email };
+        return { id: user.id };
     }
 
     private async checkPassword(password: string, hashedPassword: string): Promise<boolean> {

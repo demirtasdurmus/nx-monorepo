@@ -33,7 +33,7 @@ export class UserService {
     }
 
     async create(createUserDto: CreateUserDto): Promise<TSuccessResponse> {
-        const { email, password } = createUserDto;
+        const { firstName, lastName, email, password } = createUserDto;
         const user = await this.getUserByEmailUsecase.execute(email);
         if (user) {
             this.logger.warn(`User couldn't be created with email:${email} already exists.`);
@@ -41,7 +41,7 @@ export class UserService {
         }
         const hashedPassword = await this.bcryptService.hash(password);
 
-        await this.createUserUsecase.execute({ email, password: hashedPassword });
+        await this.createUserUsecase.execute({ firstName, lastName, email, password: hashedPassword });
         return SuccessResponse;
     }
 }
