@@ -1,17 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { UUID } from '../../../../utils/uuid';
 import { HydratedDocument } from 'mongoose';
-// import * as mongoose from 'mongoose';
+import { UserStatus, UserRoles } from '@nx-monorepo/backend/core';
 
 export type UserDocument = HydratedDocument<User>;
-export type UserStatus = 'active' | 'passive' | 'suspended' | 'banned';
-export enum UserRoles {
-    USER = 'USER',
-    DEVELOPER = 'DEVELOPER',
-    AUTHOR = 'AUTHOR',
-    ADMIN = 'ADMIN',
-    SUPERADMIN = 'SUPER_ADMIN',
-}
 
 @Schema({
     timestamps: true,
@@ -53,10 +45,10 @@ export class User {
     @Prop({ default: false })
     isVerified: boolean;
 
-    @Prop({ default: 'active', enum: ['active', 'passive', 'suspended', 'banned'] })
+    @Prop({ default: 'active', enum: ['active', 'passive', 'suspended', 'banned'], type: 'String' })
     status: UserStatus;
 
-    @Prop({ default: [UserRoles.USER] })
+    @Prop({ default: [UserRoles.USER], type: ['String'] })
     roles: UserRoles[];
 
     @Prop()
