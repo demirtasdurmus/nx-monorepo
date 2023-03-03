@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { UUID } from '../../../../utils/uuid';
 import { HydratedDocument } from 'mongoose';
-import { UserStatus, UserRoles } from '@nx-monorepo/backend/core';
+import { UserStatus, UserRoles, IUser } from '@nx-monorepo/backend/core';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -23,7 +23,7 @@ export type UserDocument = HydratedDocument<User>;
         },
     },
 })
-export class User {
+export class User implements IUser {
     @Prop({ default: UUID.generateId() })
     _id: string;
 

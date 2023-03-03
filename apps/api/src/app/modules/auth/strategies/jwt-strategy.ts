@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { UserService } from '../../user/user.service';
-import { User } from '@nx-monorepo/backend/core';
+import { IUser } from '@nx-monorepo/backend/core';
 
 type DecodedJWT = {
     data: { id: string };
@@ -31,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         return null;
     }
 
-    async validate(payload: DecodedJWT): Promise<Omit<User, 'password'>> {
+    async validate(payload: DecodedJWT): Promise<Omit<IUser, 'password'>> {
         const user = await this.userService.getById(payload.data.id);
         return {
             id: user.id,

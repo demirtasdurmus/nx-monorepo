@@ -4,7 +4,7 @@ import { RoleGuard } from '../auth/guards/roles.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { TSuccessResponse } from '@nx-monorepo/nest';
-import { User, UserRoles } from '@nx-monorepo/backend/core';
+import { IUser, UserRoles } from '@nx-monorepo/backend/core';
 import { Request } from 'express';
 
 @Controller('users')
@@ -14,7 +14,7 @@ export class UserController {
     @UseGuards(RoleGuard(UserRoles.ADMIN))
     @UseGuards(JwtAuthGuard)
     @Get()
-    getAllUsers(): Promise<User[]> {
+    getAllUsers(): Promise<IUser[]> {
         return this.userService.getAll();
     }
 

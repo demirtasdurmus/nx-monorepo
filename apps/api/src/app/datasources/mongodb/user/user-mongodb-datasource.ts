@@ -1,5 +1,4 @@
 import { InjectModel } from '@nestjs/mongoose';
-// import { User } from '@nx-monorepo/backend/core';
 import { IUserDatabaseDatasource } from '@nx-monorepo/backend/data';
 import { Model } from 'mongoose';
 import { UserDocument, User } from './schemas/user.schema';
@@ -10,20 +9,26 @@ export class UserMongoDatasource implements IUserDatabaseDatasource {
         private readonly UserModel: Model<UserDocument>,
     ) {}
 
-    getAll(): Promise<User[]> {
+    async getAll(): Promise<User[]> {
         return this.UserModel.find({}).exec();
     }
 
-    getById(id: string): Promise<User> {
+    async getById(id: string): Promise<User> {
         return this.UserModel.findOne({ _id: id }).exec();
     }
 
-    getByEmail(email: string): Promise<User> {
+    async getByEmail(email: string): Promise<User> {
         return this.UserModel.findOne({ email }).select('+password').exec();
     }
 
-    create(User: User): Promise<User> {
-        return this.UserModel.create(User);
+    async create(User: User): Promise<User> {
+        try {
+            const user = await this.UserModel.create(User);
+            return user;
+        } catch (error) {
+            console.log('****', error);
+            throw error;
+        }
     }
 
     async updateById(id: string, UserToUpdate: User): Promise<User> {

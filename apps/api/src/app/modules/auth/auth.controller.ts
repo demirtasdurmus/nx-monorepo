@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Req, UseGuards, Res, HttpCode } from '@nestjs/common';
-import { User } from '@nx-monorepo/backend/core';
+import { IUser } from '@nx-monorepo/backend/core';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -14,7 +14,7 @@ export class AuthController {
     @Post('login')
     @HttpCode(200)
     async login(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<void> {
-        const jwt = await this.authService.createAccessToken(req.user as User);
+        const jwt = await this.authService.createAccessToken(req.user as IUser);
         res.cookie('jwt', jwt, {
             httpOnly: true,
             secure: req.secure || req.headers['x-forwarded-proto'] === 'https',

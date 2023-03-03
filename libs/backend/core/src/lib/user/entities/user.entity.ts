@@ -1,4 +1,5 @@
 export type UserStatus = 'active' | 'passive' | 'suspended' | 'banned';
+
 export enum UserRoles {
     USER = 'USER',
     DEVELOPER = 'DEVELOPER',
@@ -7,7 +8,7 @@ export enum UserRoles {
     SUPERADMIN = 'SUPER_ADMIN',
 }
 
-export interface User {
+export interface IUser {
     id?: string;
     firstName?: string;
     lastName?: string;
@@ -22,3 +23,7 @@ export interface User {
     passwordResetToken?: string;
     passwordResetExpires?: Date;
 }
+
+export type CreateUserAttrs = Required<Pick<IUser, 'firstName' | 'lastName' | 'email' | 'password'>>;
+
+export type UpdateUserAttrs = Pick<IUser, 'firstName' | 'lastName' | 'profileImage'>;

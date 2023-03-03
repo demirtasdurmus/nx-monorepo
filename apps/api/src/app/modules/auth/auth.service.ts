@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { User } from '@nx-monorepo/backend/core';
+import { IUser } from '@nx-monorepo/backend/core';
 import { BcryptService } from '@nx-monorepo/nest';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class AuthService {
         private readonly bcryptService: BcryptService,
     ) {}
 
-    async createAccessToken(user: User): Promise<string> {
+    async createAccessToken(user: IUser): Promise<string> {
         const token = await this.jwtService.signAsync({
             data: { id: user.id },
         });
@@ -21,7 +21,7 @@ export class AuthService {
         return token;
     }
 
-    async validateUser(email: string, password: string): Promise<Pick<User, 'id'>> {
+    async validateUser(email: string, password: string): Promise<Pick<IUser, 'id'>> {
         const user = await this.userService.getByEmail(email);
         if (!user) {
             this.logger.error(`The user could not be validated with ${email}`);

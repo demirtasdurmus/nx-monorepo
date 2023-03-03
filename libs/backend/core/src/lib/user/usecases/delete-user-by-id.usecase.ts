@@ -7,7 +7,7 @@ export abstract class IDeleteUserByIdUsecase {
 export class DeleteUserByIdUsecase implements IDeleteUserByIdUsecase {
     constructor(private readonly repository: IUserRepository) {}
 
-    execute(id: string): Promise<void> {
+    async execute(id: string): Promise<void> {
         return this.repository.deleteById(id);
     }
 }
