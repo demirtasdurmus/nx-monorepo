@@ -26,4 +26,4 @@ export interface IUser {
 
 export type CreateUserAttrs = Required<Pick<IUser, 'firstName' | 'lastName' | 'email' | 'password'>>;
 
-export type UpdateUserAttrs = Pick<IUser, 'id' | 'firstName' | 'lastName' | 'profileImage'>;
+export type UpdateUserAttrs = Pick<IUser, 'firstName' | 'lastName' | 'profileImage'>;
